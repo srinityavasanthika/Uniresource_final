@@ -304,22 +304,15 @@ async function loadBookings(selectedDate = null) {
             });
 
             if (dateToUse === today) {
-                nextBooking = roomBookings.find(
-                    booking => booking.endTotal > currentMinutes
-                ) || null;
+                nextBooking = roomBookings.find(booking => booking.endTotal > currentMinutes) || null;
             } else {
-                nextBooking = roomBookings.length > 0 ? roomBookings[0] : null;
+                nextBooking = roomBookings[0] || null;
             }
 
             const usage = Math.min((totalBookedMinutes / (12 * 60)) * 100, 100);
 
-            if (usagePercent) {
-                usagePercent.innerText = `${Math.round(usage)}%`;
-            }
-
-            if (usageFill) {
-                usageFill.style.width = `${usage}%`;
-            }
+            if (usagePercent) usagePercent.innerText = `${Math.round(usage)}%`;
+            if (usageFill) usageFill.style.width = `${usage}%`;
 
             if (dateToUse !== today) {
                 if (badge) {
@@ -338,13 +331,6 @@ async function loadBookings(selectedDate = null) {
                     nextSlot.innerText = nextBooking
                         ? `${formatTimeTo12Hour(nextBooking.startTime)} - ${formatTimeTo12Hour(nextBooking.endTime)}`
                         : "No booking for selected date";
-                }
-
-                if (button && button.innerText !== "Under Maintenance") {
-                    button.innerText = "Book Now";
-                    button.disabled = false;
-                    button.classList.remove("btn-inactive");
-                    button.classList.add("btn-blue");
                 }
 
                 return;
@@ -380,13 +366,6 @@ async function loadBookings(selectedDate = null) {
                 nextSlot.innerText = nextBooking
                     ? `${formatTimeTo12Hour(nextBooking.startTime)} - ${formatTimeTo12Hour(nextBooking.endTime)}`
                     : "No upcoming booking";
-            }
-
-            if (button && button.innerText !== "Under Maintenance") {
-                button.innerText = "Book Now";
-                button.disabled = false;
-                button.classList.remove("btn-inactive");
-                button.classList.add("btn-blue");
             }
         });
 
