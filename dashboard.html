@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard - UniResource</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="dashboard.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <div>
+        <div class="logo-box">
+            <img src="https://cdn-icons-png.flaticon.com/512/3135/3135715.png" alt="UniResource Logo">
+        </div>
+        <div class="web-title">UniResource</div>
+        <div class="portal-text">RESOURCE PORTAL</div>
+
+        <div class="nav-links">
+            <a class="active" onclick="showSection(event,'dashboard')"><i class="fa-solid fa-chart-line"></i>Dashboard</a>
+            <a onclick="showSection(event,'rooms')"><i class="fa-solid fa-building"></i>Rooms & Labs</a>
+            <a onclick="showSection(event,'equipment')"><i class="fa-solid fa-toolbox"></i>Equipment</a>
+            <a onclick="showSection(event,'myBookings')"><i class="fa-solid fa-calendar-check"></i>My Bookings</a>
+            <a id="approvalNav" onclick="showSection(event,'approvals')"><i class="fa-solid fa-check-to-slot"></i>Approvals</a>
+            <a onclick="showSection(event,'notifications')"><i class="fa-regular fa-bell"></i>Notifications</a>
+        </div>
+    </div>
+
+    <div class="signout">
+        <button onclick="logoutUser()">Sign Out</button>
+    </div>
+</div>
+
+<div class="main-content">
+
+    <div class="topbar">
+        <div></div>
+
+        <div class="topbar-right">
+            <div class="topbar-bell" onclick="showSection(event,'notifications')">
+                <i class="fa-regular fa-bell"></i>
+            </div>
+
+            <div class="profile">
+                <div class="profile-icon" id="profileIcon">U</div>
+                <div>
+                    <div id="profileName">User</div>
+                    <small id="profileRole" style="color:gray;">Role</small>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="content">
+
+        <!-- DASHBOARD -->
+        <div id="dashboard" class="section active-section">
+            <h2>Welcome to UniResource</h2>
+
+            <p style="color:#555; font-weight:500; margin-bottom:25px;">
+                UniResource is a centralized platform designed to manage university
+                resources such as classrooms, laboratories, and equipment efficiently.
+                Students and faculty can book rooms, request equipment, and monitor
+                resource schedules through a single system.
+            </p>
+
+            <div class="dashboard-cards">
+                <div class="dash-card">
+                    <div class="card-icon"><i class="fa-solid fa-building"></i></div>
+                    <p class="card-title">Total Bookings</p>
+                    <h2 class="card-number" id="totalBookingsCount">0</h2>
+                </div>
+
+                <div class="dash-card">
+                    <div class="card-icon"><i class="fa-solid fa-calendar-check"></i></div>
+                    <p class="card-title">My Bookings</p>
+                    <h2 class="card-number" id="myBookingsCount">0</h2>
+                </div>
+
+                <div class="dash-card">
+                    <div class="card-icon"><i class="fa-solid fa-toolbox"></i></div>
+                    <p class="card-title">Total Equipment Requests</p>
+                    <h2 class="card-number" id="totalEquipmentRequestsCount">0</h2>
+                </div>
+
+                <div class="dash-card">
+                    <div class="card-icon"><i class="fa-solid fa-envelope-open-text"></i></div>
+                    <p class="card-title">My Equipment Requests</p>
+                    <h2 class="card-number" id="myEquipmentRequestsCount">0</h2>
+                </div>
+
+                <div class="dash-card" id="pendingApprovalsCard">
+                    <div class="card-icon"><i class="fa-solid fa-check"></i></div>
+                    <p class="card-title">My Pending Approvals</p>
+                    <h2 class="card-number" id="myPendingApprovalsCount">0</h2>
+                </div>
+
+            </div>
+
+            <div style="margin-top:40px">
+                <h3>System Features</h3>
+
+                <ul style="line-height:1.8;color:#555;">
+                    <li>Centralized resource management system</li>
+                    <li>Real-time room and lab booking</li>
+                    <li>Equipment request and tracking</li>
+                    <li>Maintenance control for rooms and labs</li>
+                    <li>Secure login for students, faculty and administrators</li>
+                    <li>Approval workflow for requests and bookings</li>
+                    <li>Notification system for live updates</li>
+                    <li>Smart scheduling to avoid double booking</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- ROOMS SECTION -->
+        <div id="rooms" class="section">
+
+            <div class="rooms-header">
+                <h2><i class="fa-solid fa-building"></i> Rooms & Labs</h2>
+                <div class="rooms-sub">Browse and book available spaces</div>
+            </div>
+
+            <div style="margin-bottom:15px;">
+                <button id = "setMaintenanceBtn" onclick="enableMaintenance()" class="room-btn btn-blue" style="background:#ffc107;color:black;">
+                    Set Maintenance
+                </button>
+
+                <button id = "finishMaintenance" onclick="disableMaintenance()" class="room-btn btn-blue" style="background:#28a745;color:white;margin-left:10px;">
+                    Finish Maintenance
+                </button>
+            </div>
+
+            <div class="rooms-search">
+                <input type="text" id="roomSearch" placeholder="Search rooms">
+            </div>
+
+            <div class="rooms-grid">
+
+                <div class="room-card" data-room="Lecture Hall A1">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Lecture Hall A1</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Main Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 120</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lecture Hall</div>
+                        <div class="feature-tags">
+                            <span class="tag">Projector</span>
+                            <span class="tag">Sound System</span>
+                            <span class="tag">Whiteboard</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Lecture Hall A1',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Computer Lab 201">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Computer Lab 201</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> CS Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 40</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lab</div>
+                        <div class="feature-tags">
+                            <span class="tag">40 PCs</span>
+                            <span class="tag">Projector</span>
+                            <span class="tag">Printer</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Computer Lab 201',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Seminar Room B3">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Seminar Room B3</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Arts Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 30</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Seminar</div>
+                        <div class="feature-tags">
+                            <span class="tag">Projector</span>
+                            <span class="tag">Whiteboard</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Seminar Room B3',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Physics Lab">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Physics Lab</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Science Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 35</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lab</div>
+                        <div class="feature-tags">
+                            <span class="tag">Lab Instruments</span>
+                            <span class="tag">Fume Hoods</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Physics Lab',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Conference Room 102">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Conference Room 102</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Admin Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 20</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Conference</div>
+                        <div class="feature-tags">
+                            <span class="tag">TV Screen</span>
+                            <span class="tag">Video Conf</span>
+                            <span class="tag">Whiteboard</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Conference Room 102',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Lecture Hall B2">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Lecture Hall B2</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Main Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 200</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lecture Hall</div>
+                        <div class="feature-tags">
+                            <span class="tag">Projector</span>
+                            <span class="tag">Mic System</span>
+                            <span class="tag">Recording</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Lecture Hall B2',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Chemistry Lab">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Chemistry Lab</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Science Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 30</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lab</div>
+                        <div class="feature-tags">
+                            <span class="tag">Lab Instruments</span>
+                            <span class="tag">Safety Showers</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Chemistry Lab',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Electronics Lab">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Electronics Lab</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> ECE Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 32</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lab</div>
+                        <div class="feature-tags">
+                            <span class="tag">Circuit Kits</span>
+                            <span class="tag">Oscilloscopes</span>
+                            <span class="tag">Power Supply</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Electronics Lab',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Language Lab">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Language Lab</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Humanities Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 45</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lab</div>
+                        <div class="feature-tags">
+                            <span class="tag">Headsets</span>
+                            <span class="tag">Audio System</span>
+                            <span class="tag">Recording</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Language Lab',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Innovation Lab">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Innovation Lab</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Incubation Center</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 28</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lab</div>
+                        <div class="feature-tags">
+                            <span class="tag">3D Printer</span>
+                            <span class="tag">IoT Kits</span>
+                            <span class="tag">Workbench</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Innovation Lab',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="MBA Seminar Hall">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">MBA Seminar Hall</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Management Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 80</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Seminar</div>
+                        <div class="feature-tags">
+                            <span class="tag">Projector</span>
+                            <span class="tag">AC</span>
+                            <span class="tag">Sound System</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('MBA Seminar Hall',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Civil CAD Lab">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Civil CAD Lab</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Civil Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 36</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lab</div>
+                        <div class="feature-tags">
+                            <span class="tag">36 PCs</span>
+                            <span class="tag">CAD Software</span>
+                            <span class="tag">Printer</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Civil CAD Lab',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Library Discussion Room">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Library Discussion Room</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Central Library</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 12</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Discussion</div>
+                        <div class="feature-tags">
+                            <span class="tag">Whiteboard</span>
+                            <span class="tag">Quiet Zone</span>
+                            <span class="tag">Wi-Fi</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Library Discussion Room',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Mechanical Workshop Lab">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Mechanical Workshop Lab</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Mechanical Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 40</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Workshop</div>
+                        <div class="feature-tags">
+                            <span class="tag">Machines</span>
+                            <span class="tag">Safety Gear</span>
+                            <span class="tag">Tools</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Mechanical Workshop Lab',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Smart Classroom C1">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Smart Classroom C1</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Academic Block C</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 60</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Classroom</div>
+                        <div class="feature-tags">
+                            <span class="tag">Smart Board</span>
+                            <span class="tag">Projector</span>
+                            <span class="tag">Wi-Fi</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Smart Classroom C1',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Research Lab">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Research Lab</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> R&D Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 20</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Lab</div>
+                        <div class="feature-tags">
+                            <span class="tag">Instruments</span>
+                            <span class="tag">Computers</span>
+                            <span class="tag">Restricted Access</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Research Lab',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Auditorium Mini Hall">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Auditorium Mini Hall</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Events Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 150</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Auditorium</div>
+                        <div class="feature-tags">
+                            <span class="tag">Stage</span>
+                            <span class="tag">Lighting</span>
+                            <span class="tag">Audio System</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Auditorium Mini Hall',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+                <div class="room-card" data-room="Workshop Hall">
+                    <span class="status-badge available">Available</span>
+                    <div>
+                        <div class="room-title">Workshop Hall</div>
+                        <div class="room-location"><i class="fa-solid fa-location-dot"></i> Engineering Block</div>
+                        <div class="room-meta"><i class="fa-solid fa-users"></i> 50</div>
+                        <div class="room-meta"><i class="fa-solid fa-clock"></i> Workshop</div>
+                        <div class="feature-tags">
+                            <span class="tag">Workbenches</span>
+                            <span class="tag">Tools</span>
+                            <span class="tag">Power Supply</span>
+                        </div>
+                    </div>
+                    <div class="room-availability">
+                        <div class="availability-row">
+                            <span class="availability-label">Status:</span>
+                            <span class="live-status available-now">Available now</span>
+                        </div>
+                        <div class="availability-row">
+                            <span class="availability-label">Next slot:</span>
+                            <span class="next-slot">No upcoming booking</span>
+                        </div>
+                        <div class="usage-block">
+                            <div class="usage-top">
+                                <span>Today's usage</span>
+                                <span class="usage-percent">0%</span>
+                            </div>
+                            <div class="usage-bar">
+                                <div class="usage-fill" style="width:0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <button onclick="openBookingModal('Workshop Hall',this)" class="room-btn btn-blue">Book Now</button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- EQUIPMENT SECTION -->
+        <div id="equipment" class="section">
+            <div class="rooms-header">
+                <h2><i class="fa-solid fa-toolbox"></i> Equipment</h2>
+                <div class="rooms-sub">Request and manage equipment allocation</div>
+            </div>
+
+            <div class="rooms-search">
+                <input type="text" id="equipmentSearch" placeholder="Search equipment...">
+            </div>
+
+            <div class="equipment-box">
+                <div class="equipment-filter">All Categories</div>
+
+                <table class="equipment-table">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Category</th>
+                            <th>Location</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr>
+                            <td>Dell Projector XL200</td>
+                            <td>Projectors</td>
+                            <td>Store Room A</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Dell Projector XL200')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>MacBook Pro 16"</td>
+                            <td>Laptops</td>
+                            <td>IT Department</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('MacBook Pro 16&quot;')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Canon EOS R5 Camera</td>
+                            <td>AV Equipment</td>
+                            <td>Media Center</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Canon EOS R5 Camera')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Wireless Mic Set</td>
+                            <td>Audio</td>
+                            <td>Store Room B</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Wireless Mic Set')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Lab Microscope XZ400</td>
+                            <td>Lab Equipment</td>
+                            <td>Biology Dept</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Lab Microscope XZ400')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3D Printer Ultimaker</td>
+                            <td>Printers</td>
+                            <td>Fab Lab</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('3D Printer Ultimaker')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Oscilloscope 200MHz</td>
+                            <td>Lab Equipment</td>
+                            <td>Physics Dept</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Oscilloscope 200MHz')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>iPad Pro 12.9"</td>
+                            <td>Tablets</td>
+                            <td>Library</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('iPad Pro 12.9&quot;')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Portable PA System</td>
+                            <td>Audio</td>
+                            <td>Events Office</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Portable PA System')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>HP EliteBook 840 G8</td>
+                            <td>Laptops</td>
+                            <td>IT Department</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('HP EliteBook 840 G8')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Lenovo ThinkPad E14</td>
+                            <td>Laptops</td>
+                            <td>IT Department</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Lenovo ThinkPad E14')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Epson Projector EB-X06</td>
+                            <td>Projectors</td>
+                            <td>Store Room A</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Epson Projector EB-X06')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>BenQ MX560 Projector</td>
+                            <td>Projectors</td>
+                            <td>Store Room A</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('BenQ MX560 Projector')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>JBL Portable Speaker</td>
+                            <td>Audio</td>
+                            <td>Events Office</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('JBL Portable Speaker')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sony Wireless Microphone</td>
+                            <td>Audio</td>
+                            <td>Store Room B</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Sony Wireless Microphone')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Logitech Conference Cam</td>
+                            <td>AV Equipment</td>
+                            <td>Media Center</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Logitech Conference Cam')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Samsung Galaxy Tab S9</td>
+                            <td>Tablets</td>
+                            <td>Library</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Samsung Galaxy Tab S9')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Wacom Pen Tablet</td>
+                            <td>Tablets</td>
+                            <td>Design Lab</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Wacom Pen Tablet')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Digital Oscilloscope DS1054Z</td>
+                            <td>Lab Equipment</td>
+                            <td>Physics Dept</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Digital Oscilloscope DS1054Z')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Arduino Uno Kit</td>
+                            <td>Lab Equipment</td>
+                            <td>Electronics Lab</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Arduino Uno Kit')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Raspberry Pi 4 Kit</td>
+                            <td>Lab Equipment</td>
+                            <td>Innovation Lab</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('Raspberry Pi 4 Kit')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>TI Scientific Calculator Set</td>
+                            <td>Academic Tools</td>
+                            <td>Math Department</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('TI Scientific Calculator Set')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>3D Scanner Revopoint</td>
+                            <td>Printers</td>
+                            <td>Fab Lab</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('3D Scanner Revopoint')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>VR Headset Meta Quest 3</td>
+                            <td>AV Equipment</td>
+                            <td>Media Center</td>
+                            <td>
+                                <div class="equipment-action-box">
+                                    <button onclick="requestEquipment('VR Headset Meta Quest 3')" class="room-btn btn-blue">Request</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- MY BOOKINGS -->
+        <div id="myBookings" class="section">
+            <div class="rooms-header">
+                <h2><i class="fa-solid fa-calendar-check"></i> My Bookings</h2>
+                <div class="rooms-sub">View and manage your room bookings</div>
+            </div>
+
+            <div class="requests-table-container">
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>Room</th>
+                            <th>Date</th>
+                            <th>Day</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myBookingsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <!-- APPROVALS -->
+        <div id="approvals" class="section">
+            <div class="rooms-header">
+                <h2><i class="fa-solid fa-check-to-slot"></i> Approval Requests</h2>
+                <div class="rooms-sub">Review pending room and equipment requests</div>
+            </div>
+
+            <div id="approvalList" class="requests-table-container"></div>
+        </div>
+
+        <!-- NOTIFICATIONS -->
+        <div id="notifications" class="section">
+            <div class="rooms-header">
+                <h2><i class="fa-regular fa-bell"></i> Notifications</h2>
+                <div class="rooms-sub">Stay updated with approvals, bookings and reminders</div>
+            </div>
+
+            <div id="notificationList" class="requests-table-container"></div>
+        </div>
+
+    </div>
+</div>
+
+<!-- BOOKING MODAL -->
+<div id="bookingModal" class="modal hidden">
+    <div class="modal-box">
+        <h2>Book Room</h2>
+
+        <input type="text" id="modalRoomName" placeholder="Room Name" readonly>
+        <input type="date" id="modalDate">
+        <input type="text" id="modalDay" placeholder="Day" readonly>
+        <input type="time" id="modalStartTime">
+        <input type="time" id="modalEndTime">
+
+        <div class="modal-actions">
+            <button class="room-btn btn-blue" onclick="submitBooking()">Confirm Booking</button>
+            <button class="room-btn" onclick="closeBookingModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

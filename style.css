@@ -1,0 +1,186 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    height:100vh;
+    display:flex;
+}
+
+:root{
+    --navy:hsl(222, 50%, 30%);
+    --navy-light:hsl(222, 50%, 38%);
+    --dark-yellow:hsl(45, 100%, 45%);
+    --yellow-soft:hsl(45, 100%, 92%);
+}
+
+/* LEFT SIDE */
+.left{
+    width:50%;
+    background:var(--navy);
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:40px;
+}
+
+.logo-box{
+    width:70px;
+    height:70px;
+    background:hsl(45, 100%, 60%);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin-bottom:20px;
+}
+
+.logo-box i{
+    color:black;
+    font-size:30px;
+}
+
+.left h1{
+    font-size:34px;
+    margin-bottom:15px;
+}
+
+.left p{
+    text-align:center;
+    max-width:420px;
+    margin-bottom:40px;
+    line-height:1.6;
+    font-size:14px;
+}
+
+.stats{
+    display:flex;
+    gap:50px;
+}
+
+.stat{
+    text-align:center;
+}
+
+.stat h2{
+    font-size:26px;
+    font-weight:600;
+    color:var(--dark-yellow);
+}
+
+.stat p{
+    font-size:13px;
+    margin-top:5px;
+    color:white;
+}
+
+/* RIGHT SIDE */
+.right{
+    width:50%;
+    background:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+
+.form-container{
+    width:360px;
+}
+
+.form-container h2{
+    margin-bottom:8px;
+}
+
+.form-container p{
+    color:gray;
+    font-size:14px;
+    margin-bottom:20px;
+}
+
+/* Role Buttons */
+.role-buttons{
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:20px;
+}
+
+.role-buttons button{
+    width:32%;
+    padding:12px 5px;
+    border:1px solid #ccc;
+    background:white;
+    cursor:pointer;
+    border-radius:6px;
+    font-size:11px;
+    transition:0.3s;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:6px;
+}
+
+.role-buttons button img{
+    width:35px;
+    height:35px;
+}
+
+.role-buttons button.active{
+    border:2px solid var(--dark-yellow);
+    background:var(--yellow-soft);
+}
+
+/* Inputs */
+input{
+    width:100%;
+    padding:12px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+input:focus{
+    outline:none;
+    border-color:var(--navy);
+}
+
+.forgot{
+    text-align:right;
+    font-size:12px;
+    margin-bottom:15px;
+}
+
+.forgot a{
+    text-decoration:none;
+    color:var(--navy);
+}
+
+/* Buttons */
+.primary-btn{
+    width:100%;
+    padding:12px;
+    background:var(--navy);
+    color:white;
+    border:none;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+.switch-text{
+    margin-top:15px;
+    font-size:13px;
+    text-align:center;
+}
+
+.switch-text span{
+    color:var(--navy);
+    cursor:pointer;
+    font-weight:600;
+}
+
+.hidden{
+    display:none;
+}
