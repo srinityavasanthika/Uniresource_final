@@ -241,7 +241,6 @@ document.addEventListener("change", function (e) {
     }
 });
 
-// PUBLIC ROOM STATUS
 async function loadBookings(selectedDate = null) {
     try {
         let dateToUse = selectedDate;
@@ -373,7 +372,6 @@ async function loadBookings(selectedDate = null) {
         console.log("LOAD BOOKINGS ERROR:", err);
     }
 }
-
 function parseBookingDateTime(dateStr, timeStr) {
     return new Date(`${dateStr}T${timeStr}`);
 }
