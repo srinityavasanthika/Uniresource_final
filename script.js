@@ -1056,22 +1056,27 @@ async function rejectRequest(id) {
 
 function applyRoleAccess() {
     const role = localStorage.getItem("userRole");
+
     const approvalNav = document.getElementById("approvalNav");
     const pendingApprovalsCard = document.getElementById("pendingApprovalsCard");
+    const setMaintenanceBtn = document.getElementById("setMaintenanceBtn");
+    const finishMaintenanceBtn = document.getElementById("finishMaintenanceBtn");
 
     if (role === "Student") {
         if (approvalNav) approvalNav.style.display = "none";
         if (pendingApprovalsCard) pendingApprovalsCard.style.display = "none";
-    }
-
-    if (role === "Faculty/Staff") {
+        if (setMaintenanceBtn) setMaintenanceBtn.style.display = "none";
+        if (finishMaintenanceBtn) finishMaintenanceBtn.style.display = "none";
+    } else if (role === "Faculty/Staff") {
         if (approvalNav) approvalNav.style.display = "block";
         if (pendingApprovalsCard) pendingApprovalsCard.style.display = "block";
-    }
-
-    if (role === "Administrator") {
+        if (setMaintenanceBtn) setMaintenanceBtn.style.display = "none";
+        if (finishMaintenanceBtn) finishMaintenanceBtn.style.display = "none";
+    } else if (role === "Administrator") {
         if (approvalNav) approvalNav.style.display = "block";
         if (pendingApprovalsCard) pendingApprovalsCard.style.display = "block";
+        if (setMaintenanceBtn) setMaintenanceBtn.style.display = "inline-block";
+        if (finishMaintenanceBtn) finishMaintenanceBtn.style.display = "inline-block";
     }
 }
 
